@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- 
+
+    协议头，域名，端口，有一个不一样就跨域（绝对不看其他东西，也就是不看域名最终指向的ip，它只看浏览器上的域名怎么写的）
+
+    同源：协议头、域名、端口都一样就叫同源，同源不存在问题
+
+
+    跨域存在问题：浏览器拒绝访问跨域接口
+
+    我们就是要跨域访问接口
+
+    解决：
+        方案一：JSONP
+                JSON和JSONP到底什么？
+
+                    JSON只是一个按规则写的字符串，它用来解决数据传输问题的
+
+                    JSONP：只是一种解决跨域拿到响应体（JSON数据）的一套技术方案
+
+
+                JSONP实现：利用的是script标签可以跨域访问的特性，并且它会把响应体当JS代码来执行
+                        那么如何想办法获取到响应体呢？这个时候就需要服务端也帮一个忙
+                        我把我的函数名传递给服务端，再然后服务端获取我这个函数名，并且返回的响应体
+                        就是一个调用这个函数名的响应体，再然后把JSON数据当参数传递过去就可以了
+
+
+                都会有一个接口文档，接口文档里写支持jsonp，那么就代表服务器会帮这个忙，一般jsonp传函数名过去都用的是callback这个参数名
+
+
+        方案二：CORS
+
+ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script>
+        function f1(obj){
+
+            console.log(obj);
+        }
+    </script>
+
+    <!-- script会把响应体当JS代码来执行 -->
+    <script src="http://127.0.0.1/Day10/01_fuxi/01-1-KuaYu/data.php?callback=f1"></script>
+
+
+</head>
+<body>
+    <input type="button" id="btn" value="点我发请求">
+</body>
+</html>
+
+<script>
+
+    document.getElementById('btn').onclick = function(){
+
+        var xhr = new XMLHttpRequest();
+
+        //相对路径永远都跟自己同源
+        xhr.open('get','http://127.0.0.1/Day10/01_fuxi/01-1-KuaYu/data.php');
+
+        xhr.send();
+
+        xhr.onload = function(){
+
+            console.log(xhr.responseText);
+            
+        }
+    }
+</script>
